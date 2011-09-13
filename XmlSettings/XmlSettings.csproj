@@ -48,6 +48,9 @@
     <Compile Include="XElementExtensions.cs" />
     <Compile Include="XmlUtility.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\XmlSettings.nuspec" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
