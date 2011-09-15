@@ -5,12 +5,10 @@ using System.Xml.Linq;
 
 namespace XmlSettings {
     public class Settings : ISettings {
-        private readonly XDocument _config;
         private readonly string _path;
 
         public Settings(string path) {
             _path = path;
-            _config = XmlUtility.GetOrCreateDocument("settings", path);
         }
 
         public string GetValue(string section, string key) {
@@ -24,7 +22,7 @@ namespace XmlSettings {
 
             try {
                 // Get the section and return null if it doesnt exist
-                var sectionElement = _config.Root.Element(section);
+                var sectionElement = GetDocument().Root.Element(section);
                 if (sectionElement == null) {
                     return null;
                 }
@@ -49,7 +47,13 @@ namespace XmlSettings {
             }
 
             try {
-                var sectionElement = _config.Root.Element(section);
+                XDocument config = GetDocument();
+
+                if (config == null) {
+                    return null;
+                }
+
+                XElement sectionElement = config.Root.Element(section);
                 if (sectionElement == null) {
                     return null;
                 }
@@ -62,6 +66,7 @@ namespace XmlSettings {
                         kvps.Add(new KeyValuePair<string, string>(key, value));
                     }
                 }
+
                 return kvps.AsReadOnly();
             }
             catch (Exception e) {
@@ -71,7 +76,6 @@ namespace XmlSettings {
 
         public void SetValue(string section, string key, string value) {
             SetValueInternal(section, key, value);
-            Save(_config);
         }
 
         public void SetValues(string section, IList<KeyValuePair<string, string>> values) {
@@ -82,14 +86,13 @@ namespace XmlSettings {
             foreach (var kvp in values) {
                 SetValueInternal(section, kvp.Key, kvp.Value);
             }
-            Save(_config);
         }
 
         private void SetValueInternal(string section, string key, string value) {
             if (String.IsNullOrEmpty(section)) {
                 throw new ArgumentException("", "section");
             }
-            
+
             if (String.IsNullOrEmpty(key)) {
                 throw new ArgumentException("", "key");
             }
@@ -98,10 +101,12 @@ namespace XmlSettings {
                 throw new ArgumentNullException("value");
             }
 
-            var sectionElement = _config.Root.Element(section);
+            XDocument config = GetDocument(createIfNotExists: true);
+
+            XElement sectionElement = config.Root.Element(section);
             if (sectionElement == null) {
                 sectionElement = new XElement(section);
-                _config.Root.Add(sectionElement);
+                config.Root.Add(sectionElement);
             }
 
             foreach (var e in sectionElement.Elements("add")) {
@@ -109,7 +114,7 @@ namespace XmlSettings {
 
                 if (tempKey == key) {
                     e.SetAttributeValue("value", value);
-                    Save(_config);
+                    Save(config);
                     return;
                 }
             }
@@ -118,6 +123,7 @@ namespace XmlSettings {
             addElement.SetAttributeValue("key", key);
             addElement.SetAttributeValue("value", value);
             sectionElement.Add(addElement);
+            Save(config);
         }
 
         public bool DeleteValue(string section, string key) {
@@ -129,7 +135,13 @@ namespace XmlSettings {
                 throw new ArgumentException("", "key");
             }
 
-            var sectionElement = _config.Root.Element(section);
+            XDocument config = GetDocument();
+
+            if (config == null) {
+                return false;
+            }
+
+            XElement sectionElement = config.Root.Element(section);
             if (sectionElement == null) {
                 return false;
             }
@@ -141,12 +153,13 @@ namespace XmlSettings {
                     break;
                 }
             }
+
             if (elementToDelete == null) {
                 return false;
             }
 
             elementToDelete.Remove();
-            Save(_config);
+            Save(config);
             return true;
 
         }
@@ -155,19 +168,29 @@ namespace XmlSettings {
             if (String.IsNullOrEmpty(section)) {
                 throw new ArgumentException("", "section");
             }
+            
+            XDocument config = GetDocument();
 
-            var sectionElement = _config.Root.Element(section);
+            if (config == null) {
+                return false;
+            }
+
+            XElement sectionElement = config.Root.Element(section);
             if (sectionElement == null) {
                 return false;
             }
 
             sectionElement.Remove();
-            Save(_config);
+            Save(config);
             return true;
         }
 
         private void Save(XDocument document) {
             document.Save(_path);
+        }
+
+        private XDocument GetDocument(bool createIfNotExists = false) {
+            return XmlUtility.GetDocument("settings", _path, createIfNotExists);
         }
     }
 }

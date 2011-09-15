@@ -3,16 +3,21 @@ namespace XmlSettings {
     using System.Xml.Linq;
 
     internal static class XmlUtility {
-        internal static XDocument GetOrCreateDocument(XName rootName, string path) {
+        internal static XDocument GetDocument(XName rootName, string path, bool createIfNotExists) {
             if (File.Exists(path)) {
                 try {
                     return GetDocument(path);
                 }
                 catch (FileNotFoundException) {
-                    return CreateDocument(rootName, path);
+                    if (createIfNotExists) {
+                        return CreateDocument(rootName, path);
+                    }
                 }
             }
-            return CreateDocument(rootName, path);
+            if (createIfNotExists) {
+                return CreateDocument(rootName, path);
+            }
+            return null;
         }
 
         private static XDocument CreateDocument(XName rootName, string path) {
