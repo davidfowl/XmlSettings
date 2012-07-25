@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace XmlSettings {
-    public interface ISettings {
+namespace XmlSettings
+{
+    public interface ISettings
+    {
         string GetValue(string section, string key);
         IList<KeyValuePair<string, string>> GetValues(string section);
         void SetValue(string section, string key, string value);
