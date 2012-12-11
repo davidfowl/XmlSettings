@@ -32,13 +32,18 @@ namespace XmlSettings
         {
             XDocument document = new XDocument(new XElement(rootName));
             // Add it to the file system
+            // Note: document.Save internally opens file for FileAccess.Write 
+            // but does allow other dirty read (FileShare.Read).   it is the most
+            // optimal where write is infrequent and dirty read is acceptable.
             document.Save(path);
             return document;
         }
 
         internal static XDocument GetDocument(string path)
         {
-            using (Stream configStream = File.OpenRead(path))
+            // opens file for FileAccess.Read but does allow other read/write (FileShare.ReadWrite).   
+            // it is the most optimal where write is infrequent and dirty read is acceptable.
+            using (var configStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 return XDocument.Load(configStream);
             }
