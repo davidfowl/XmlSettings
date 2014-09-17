@@ -1,7 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlSettings", "XmlSettings\XmlSettings.csproj", "{1E876D43-3A70-46A2-923E-FB8E17EDAEAD}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.22111.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "XmlSettings", "XmlSettings\XmlSettings.kproj", "{9E85A8D8-A812-4795-AA79-E513D5D132BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1E876D43-3A70-46A2-923E-FB8E17EDAEAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1E876D43-3A70-46A2-923E-FB8E17EDAEAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1E876D43-3A70-46A2-923E-FB8E17EDAEAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1E876D43-3A70-46A2-923E-FB8E17EDAEAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E85A8D8-A812-4795-AA79-E513D5D132BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E85A8D8-A812-4795-AA79-E513D5D132BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E85A8D8-A812-4795-AA79-E513D5D132BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E85A8D8-A812-4795-AA79-E513D5D132BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
